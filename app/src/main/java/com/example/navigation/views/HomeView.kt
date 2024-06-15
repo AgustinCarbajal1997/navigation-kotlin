@@ -8,11 +8,16 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.navigation.NavController
 import com.example.navigation.components.ActionButton
 import com.example.navigation.components.MainButton
 import com.example.navigation.components.Space
@@ -22,7 +27,7 @@ import com.example.navigation.components.TitleView
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun HomeView() {
+fun HomeView(navController: NavController) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -34,12 +39,16 @@ fun HomeView() {
             ActionButton()
         }
     ) {
-        ContentHomeView()
+        ContentHomeView(navController)
     }
 }
 
 @Composable
-fun ContentHomeView() {
+fun ContentHomeView(navController: NavController) {
+    val id = 123
+    var opcional by remember {
+        mutableStateOf("")
+    }
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -47,8 +56,12 @@ fun ContentHomeView() {
     ) {
         TitleView(name = "Home viewww")
         Space()
+        TextField(
+            value = opcional,
+            onValueChange = { opcional = it },
+            label = { Text(text = "Opcional") })
         MainButton(name = "Detail View", backColor = Color.Red, color = Color.White) {
-            println("Soy un boton generico")
+            navController.navigate(route = "Detail/${id}/?${opcional}")
         }
     }
 }
